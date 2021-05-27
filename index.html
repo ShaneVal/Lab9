@@ -42,32 +42,109 @@
   </fieldset>
 
   <section id="error-btns">
-    <button>Console Log Demo</button>
-    <button>Console Error Demo</button>
-    <button>Console Dir</button>
-    <button>Console dirxml</button>
-    <button>Console Error</button>
-    <button>Console Group Start</button>
-    <button>Console Group End</button>
-    <button>Console Table</button>
-    <button>Start Timer</button>
-    <button>End Timer</button>
-    <button>Console Trace</button>
-    <button>Trigger a Global Error</button>
+    <button id='log'>Console Log Demo</button>
+    <button id='demo'>Console Error Demo</button>
+    <button id='dir'>Console Dir</button>
+    <button id='xml'>Console dirxml</button>
+    <button id='group'>Console Group Start</button>
+    <button id='console'>Console Group End</button>
+    <button id='table'>Console Table</button>
+    <button id='s_timer'>Start Timer</button>
+    <button id='e_timer'>End Timer</button>
+    <button id='trace'>Console Trace</button>
+    <button id='global'>Trigger a Global Error</button>
   </section>
 
   <script>
     let calculateBtn = document.querySelector('#calculate');
+    class MessageError extends Error {
+      constructor(message) {
+      super(message);
+      this.name = "MessageError";
+      }
+    }
     calculateBtn.addEventListener('click', () => {
       let output = document.querySelector('output');
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      try {
+        if(firstNum.length == 0){
+          throw new MessageError("ERROR");
+        }
+        if(secondNum.length == 0){
+          throw new ReferenceError("Second Num Undefined");
+        }
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      } catch(err) {
+        console.error(err);
+        alert("Need both values to calculate.");
+      }
+      finally{
+       alert("Completed");
+      }
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
     // TODO - Make buttons functional
+
+    errorBtns[0].addEventListener('click', () => {
+      console.log(document.getElementById("first-num").value);
+    });
+
+    errorBtns[1].addEventListener('click', () => {
+      console.error("You thought!");
+    });
+
+    errorBtns[2].addEventListener('click', () => {
+      console.dir(document.head);
+    });
+
+    errorBtns[3].addEventListener('click', () => {
+      console.dirxml(document);
+    });
+
+    errorBtns[4].addEventListener('click', () => {
+      console.group("number");      
+      console.info(document.getElementById("first-num").value);
+      console.info(document.getElementById("second-num").value);
+      console.info("5")
+      console.info("6");
+    });
+    // ASK
+    errorBtns[5].addEventListener('click', () => {
+      console.groupEnd("number");
+      //console.log("ended");
+      console.info();
+    });
+
+    // ASK
+    errorBtns[6].addEventListener('click', () => {
+      console.table(errorBtns);
+    });
+
+    errorBtns[7].addEventListener('click', () => {
+      console.time("demo");
+    });
+
+    errorBtns[8].addEventListener('click', () => {
+      console.timeEnd("demo");
+    });
+    // ASK
+    errorBtns[9].addEventListener('click', () => {
+      const deep = () => { deeper(); };
+      const deeper = () => { deepest(); };
+      const deepest = () => { realdeepest(); };
+      const realdeepest = () => { console.trace(); };
+      deep();
+      console.trace();
+    });
+
+    errorBtns[10].addEventListener('click', () => {
+      throw new ReferenceError("Can't find variable boom");
+    });
+
   </script>
+    <script src="./console.js" type="module"></script>
 </body>
 </html>
