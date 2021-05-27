@@ -55,6 +55,15 @@
     <button id='global'>Trigger a Global Error</button>
   </section>
 
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "9a79a85d5ebc4c468de3107660ec8738"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
+                        
+
   <script>
     let calculateBtn = document.querySelector('#calculate');
     class MessageError extends Error {
@@ -111,14 +120,13 @@
       console.info("5")
       console.info("6");
     });
-    // ASK
+    
     errorBtns[5].addEventListener('click', () => {
       console.groupEnd("number");
       //console.log("ended");
       console.info();
     });
 
-    // ASK
     errorBtns[6].addEventListener('click', () => {
       console.table(errorBtns);
     });
@@ -130,7 +138,7 @@
     errorBtns[8].addEventListener('click', () => {
       console.timeEnd("demo");
     });
-    // ASK
+    
     errorBtns[9].addEventListener('click', () => {
       const deep = () => { deeper(); };
       const deeper = () => { deepest(); };
@@ -143,6 +151,11 @@
     errorBtns[10].addEventListener('click', () => {
       throw new ReferenceError("Can't find variable boom");
     });
+
+    window.onerror = function () {
+        console.log("There's an error");
+        TrackJS.track('Testing TrackJS!');
+    };
 
   </script>
     <script src="./console.js" type="module"></script>
